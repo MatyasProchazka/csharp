@@ -1,17 +1,11 @@
 ﻿using Arena;
 
-Kostka kostka = new Kostka();
+Kostka kostka = new Kostka(10);
 
 Bojovnik bojovnik = new Bojovnik("Zalgoren", 100, 20, 10, kostka);
-
 Bojovnik souper = new Bojovnik("Shadow", 60, 18, 15, kostka);
+ArenaBojovniku arena = new ArenaBojovniku(bojovnik, souper, kostka);
 
-Console.WriteLine(bojovnik.GrafickyZivot());
+arena.Zapas();
 
-souper.Utoc(bojovnik);
-
-Console.WriteLine(souper.VratPosledniZpravu());
-Console.WriteLine(bojovnik.VratPosledniZpravu());
-
-Console.WriteLine(bojovnik.GrafickyZivot());
 Console.ReadKey();

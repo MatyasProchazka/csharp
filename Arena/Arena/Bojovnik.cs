@@ -123,12 +123,18 @@ namespace Arena
             souper.BranSe(uder);
 
         }
-
+        /// <summary>
+        /// nastavi zpravu ktera se bude vypisovat
+        /// </summary>
+        /// <param name="zprava"></param>
         private void NastavZpravu(string zprava)
         {
             this.zprava = zprava;
         }
-
+        /// <summary>
+        /// vrati zpravu ktera je naposledy ulozena
+        /// </summary>
+        /// <returns>zprava ktera se vypise</returns>
         public string VratPosledniZpravu()
         {
             return zprava;
