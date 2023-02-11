@@ -33,6 +33,8 @@ namespace Arena
         /// </summary>
         private Kostka kostka;
 
+        private string zprava;
+
         /// <summary>
         /// konstruktor pro atributy
         /// </summary>
@@ -86,6 +88,50 @@ namespace Arena
             s = s.PadRight(celkem + 1);
             s += "]";
             return s;
+        }
+        /// <summary>
+        /// strhne hp pri utoku soupere
+        /// </summary>
+        /// <param name="uder"></param>
+        public void BranSe(int uder)
+        {
+            int zraneni = uder - (obrana - kostka.Hod());
+            if (zraneni > 0)
+            {
+                zivot -= zraneni;
+                zprava = String.Format("{0} utrpěl poškození {1} hp", jmeno, zraneni);
+                if (zivot <= 0)
+                {
+                    zivot = 0;
+                    zprava += " a zemrel";
+                }
+            }
+            else
+            {
+                zprava = String.Format("{0} odrazil utok", jmeno);
+            }
+            NastavZpravu(zprava);
+        }
+        /// <summary>
+        /// ubere hp protivnikovi
+        /// </summary>
+        /// <param name="souper"></param>
+        public void Utoc(Bojovnik souper)
+        {
+            int uder = utok + kostka.Hod();
+            NastavZpravu(String.Format("{0} utoci s uderem za {1} hp", jmeno, uder));
+            souper.BranSe(uder);
+
+        }
+
+        private void NastavZpravu(string zprava)
+        {
+            this.zprava = zprava;
+        }
+
+        public string VratPosledniZpravu()
+        {
+            return zprava;
         }
     }
 }
