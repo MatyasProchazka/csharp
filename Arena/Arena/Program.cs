@@ -1,6 +1,11 @@
 ﻿using Arena;
 
 Kostka kostka = new Kostka();
-Console.WriteLine(kostka.VratPocetStran());
-Console.WriteLine(kostka);
-Console.ReadKey(); 
+
+Bojovnik karel = new Bojovnik("Karel", 20, 5, 3, kostka);
+
+Console.WriteLine(karel); 
+Console.WriteLine(karel.Nazivu());
+Console.WriteLine(karel.GrafickyZivot());
+
+Console.ReadKey();
