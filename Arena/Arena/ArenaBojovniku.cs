@@ -41,10 +41,27 @@ namespace Arena
         {
             Console.Clear();
             Console.WriteLine("-------------- Aréna -------------- \n");
-            Console.WriteLine("Zdraví bojovníků: \n");
-            Console.WriteLine("{0} {1}", bojovnik1, bojovnik1.GrafickyZivot());
-            Console.WriteLine("{0} {1}", bojovnik2, bojovnik2.GrafickyZivot());
+            Console.WriteLine("Bojovníci: \n");
+            VypisBojovnika(bojovnik1);
+            Console.WriteLine();
+            VypisBojovnika(bojovnik2);
+            Console.WriteLine();    
         }
+
+        private void VypisBojovnika(Bojovnik b)
+        {
+            Console.WriteLine(b);
+            Console.Write("Zivot: ");
+            Console.WriteLine(b.GrafickyZivot());
+
+            if (b is Mag)
+            {
+                Console.Write("Mana: ");
+                Console.WriteLine(((Mag)b).GrafickaMana());
+            }
+
+        }
+
         /// <summary>
         /// vypsani zpravy s dramatickou pauzou
         /// </summary>

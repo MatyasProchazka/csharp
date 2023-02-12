@@ -11,27 +11,27 @@ namespace Arena
         /// <summary>
         /// jmeno bojovnika
         /// </summary>
-        private string jmeno;
+        protected string jmeno;
         /// <summary>
         /// aktualni pocet hp bojovnika
         /// </summary>
-        private int zivot;
+        protected int zivot;
         /// <summary>
         /// maximalni pocet hp bojovnika
         /// </summary>
-        private int maxZivot;
+        protected int maxZivot;
         /// <summary>
         /// utok v hp
         /// </summary>
-        private int utok;
+        protected int utok;
         /// <summary>
         /// obrana v hp
         /// </summary>
-        private int obrana;
+        protected int obrana;
         /// <summary>
         /// instance hraci kostky
         /// </summary>
-        private Kostka kostka;
+        protected Kostka kostka;
 
         private string zprava;
 
@@ -69,14 +69,14 @@ namespace Arena
             return (zivot > 0);
         }
         /// <summary>
-        /// vypise graficky aktualni pocet hp
+        /// vypise graficky aktualni pocet parametru
         /// </summary>
-        /// <returns>graficky zapis momentalnich hp</returns>
-        public string GrafickyZivot()
+        /// <returns>graficky zapis momentalnich parametru</returns>
+        protected string GrafickyUkazatel(int aktualni, int maximalni)
         {
             string s = "[";
             int celkem = 20;
-            double pocet = Math.Round(((double)zivot /maxZivot) * celkem);
+            double pocet = Math.Round(((double)aktualni /maximalni) * celkem);
             if ((pocet == 0) && (Nazivu()))
             {
                 pocet = 1;
@@ -88,6 +88,14 @@ namespace Arena
             s = s.PadRight(celkem + 1);
             s += "]";
             return s;
+        }
+        /// <summary>
+        /// zobrazi graficky hp
+        /// </summary>
+        /// <returns>graficky zapis hp</returns>
+        public string GrafickyZivot()
+        {
+            return GrafickyUkazatel(zivot, maxZivot);
         }
         /// <summary>
         /// strhne hp pri utoku soupere
@@ -116,7 +124,7 @@ namespace Arena
         /// ubere hp protivnikovi
         /// </summary>
         /// <param name="souper"></param>
-        public void Utoc(Bojovnik souper)
+        public virtual void Utoc(Bojovnik souper)
         {
             int uder = utok + kostka.Hod();
             NastavZpravu(String.Format("{0} utoci s uderem za {1} hp", jmeno, uder));
@@ -127,7 +135,7 @@ namespace Arena
         /// nastavi zpravu ktera se bude vypisovat
         /// </summary>
         /// <param name="zprava"></param>
-        private void NastavZpravu(string zprava)
+        protected void NastavZpravu(string zprava)
         {
             this.zprava = zprava;
         }
