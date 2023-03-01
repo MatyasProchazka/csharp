@@ -150,12 +150,21 @@ namespace Arena
             return zprava;
         }
 
+        /// <summary>
+        /// vypise aktualni staty hrace
+        /// </summary>
         public void VypisStaty()
         {
+            Console.Clear();
             Console.WriteLine("JMENO: {0}\nUtok: {1}\nObrana: {2}\nMaximální zdraví: {3}\n", jmeno, utok, obrana, maxZivot);
-            Thread.Sleep(500);
+            Console.ReadKey();
         }
 
+        /// <summary>
+        /// podle zadaneho typu statu a zadaneho poctu bodu prida dany pocet bodu k danemu statu hrace
+        /// </summary>
+        /// <param name="typStatu"></param>
+        /// <param name="pocetBodu"></param>
         public void PridatStat(string typStatu, int pocetBodu)
         {
             switch (typStatu)
@@ -175,21 +184,28 @@ namespace Arena
                     Console.WriteLine("Pridano {0} bodu do maximalniho zdravi, celkove zdravi: {1}", pocetBodu, maxZivot);
                     Console.ReadKey();
                     break;
+                default:
+                    Console.WriteLine("neplatny vstup");
+                    break;
             }
         }
-
+        /// <summary>
+        /// da hraci pocet zivotu stejny jako maximalni pocet
+        /// </summary>
         public void VylecitBojovnika()
         {
             zivot = maxZivot;
         }
 
+        /// <summary>
+        /// funkce pouze pro pocitacoveho soupere, po kazdem kole mu prida nahodne/nahodne a dane pocet statu ke vsem statum, aby byl v dalsim kole tezsi na porazeni
+        /// </summary>
         public void PridatStatyNPC()
         {
             Kostka kostkaNPC = new Kostka(5);
             utok += kostkaNPC.Hod();
             obrana += kostkaNPC.Hod();
             maxZivot += kostkaNPC.Hod() + 4;
-            Console.WriteLine("{0}, {1}, {2}", utok, obrana, maxZivot);
         }
     }
 }

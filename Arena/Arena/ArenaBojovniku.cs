@@ -74,6 +74,7 @@ namespace Arena
 
         public void Zapas()
         {
+            Console.Clear();
             Console.WriteLine("Vítejte v aréně!");
             Console.WriteLine("Dnes se utkají {0} s {1}! \n", hrac, npc);
             // prohození bojovníků
@@ -98,11 +99,13 @@ namespace Arena
 
             if (hrac.Nazivu())
             { 
+                //nastavi hraci a npc zdravi na max a zesili npc
                 hrac.VylecitBojovnika();
                 hrac.PocetKol += 1;
                 npc.PridatStatyNPC();
                 npc.VylecitBojovnika();
                 Console.WriteLine("vyhral {0} a ma {1} vyhranych zapasu", hrac, hrac.PocetKol);
+                Console.ReadKey();
 
             }
             else
