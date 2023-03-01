@@ -35,6 +35,8 @@ namespace Arena
 
         private string zprava;
 
+        public int PocetKol { get; set; }
+
         /// <summary>
         /// konstruktor pro atributy
         /// </summary>
@@ -83,7 +85,7 @@ namespace Arena
             }
             for (int i = 0; i < pocet; i++)
             {
-                s += "#";
+                s += "█";
             }
             s = s.PadRight(celkem + 1);
             s += "]";
@@ -146,6 +148,48 @@ namespace Arena
         public string VratPosledniZpravu()
         {
             return zprava;
+        }
+
+        public void VypisStaty()
+        {
+            Console.WriteLine("JMENO: {0}\nUtok: {1}\nObrana: {2}\nMaximální zdraví: {3}\n", jmeno, utok, obrana, maxZivot);
+            Thread.Sleep(500);
+        }
+
+        public void PridatStat(string typStatu, int pocetBodu)
+        {
+            switch (typStatu)
+            {
+                case "1":
+                    utok += pocetBodu;
+                    Console.WriteLine("Pridano {0} bodu do utoku, celkovy utok: {1}", pocetBodu, utok);
+                    Console.ReadKey();
+                    break;
+                case "2":
+                    obrana += pocetBodu;
+                    Console.WriteLine("Pridano {0} bodu do obrany, celkova obrana: {1}", pocetBodu, obrana);
+                    Console.ReadKey();
+                    break;
+                case "3":
+                    maxZivot += pocetBodu;
+                    Console.WriteLine("Pridano {0} bodu do maximalniho zdravi, celkove zdravi: {1}", pocetBodu, maxZivot);
+                    Console.ReadKey();
+                    break;
+            }
+        }
+
+        public void VylecitBojovnika()
+        {
+            zivot = maxZivot;
+        }
+
+        public void PridatStatyNPC()
+        {
+            Kostka kostkaNPC = new Kostka(5);
+            utok += kostkaNPC.Hod();
+            obrana += kostkaNPC.Hod();
+            maxZivot += kostkaNPC.Hod() + 4;
+            Console.WriteLine("{0}, {1}, {2}", utok, obrana, maxZivot);
         }
     }
 }

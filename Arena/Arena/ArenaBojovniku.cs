@@ -12,11 +12,11 @@ namespace Arena
         /// <summary>
         /// instance prvniho bojovnika
         /// </summary>
-        private Bojovnik bojovnik1;
+        private Bojovnik hrac;
         /// <summary>
         /// instance druheho bojovnika
         /// </summary>
-        private Bojovnik bojovnik2;
+        private Bojovnik npc;
         /// <summary>
         /// instance hraci kostky
         /// </summary>
@@ -28,10 +28,10 @@ namespace Arena
         /// <param name="bojovnik1"></param>
         /// <param name="bojovnik2"></param>
         /// <param name="kostka"></param>
-        public ArenaBojovniku(Bojovnik bojovnik1, Bojovnik bojovnik2, Kostka kostka)
+        public ArenaBojovniku(Bojovnik hrac, Bojovnik npc, Kostka kostka)
         {
-            this.bojovnik1 = bojovnik1;
-            this.bojovnik2 = bojovnik2;
+            this.hrac = hrac;
+            this.npc = npc;
             this.kostka = kostka;
         }
         /// <summary>
@@ -42,9 +42,9 @@ namespace Arena
             Console.Clear();
             Console.WriteLine("-------------- Aréna -------------- \n");
             Console.WriteLine("Bojovníci: \n");
-            VypisBojovnika(bojovnik1);
+            VypisBojovnika(hrac);
             Console.WriteLine();
-            VypisBojovnika(bojovnik2);
+            VypisBojovnika(npc);
             Console.WriteLine();    
         }
 
@@ -74,43 +74,42 @@ namespace Arena
 
         public void Zapas()
         {
-            Bojovnik b1 = bojovnik1;
-            Bojovnik b2 = bojovnik2;
             Console.WriteLine("Vítejte v aréně!");
-            Console.WriteLine("Dnes se utkají {0} s {1}! \n", bojovnik1, bojovnik2);
+            Console.WriteLine("Dnes se utkají {0} s {1}! \n", hrac, npc);
             // prohození bojovníků
-            bool zacinaBojovnik2 = (kostka.Hod() <= kostka.VratPocetStran() / 2);
-            if (zacinaBojovnik2)
-            {
-                b1 = bojovnik2;
-                b2 = bojovnik1;
-            }
-            Console.WriteLine("Začínat bude bojovník {0}! \nZápas může začít...", b1);
+            Console.WriteLine("Zapas muze zacit...");
             Console.ReadKey();
             // cyklus s bojem
-            while (b1.Nazivu() && b2.Nazivu())
+            while (hrac.Nazivu() && npc.Nazivu())
             {
-                b1.Utoc(b2);
+                hrac.Utoc(npc);
                 Vykresli();
-                VypisZpravu(b1.VratPosledniZpravu()); // zpráva o útoku
-                VypisZpravu(b2.VratPosledniZpravu()); // zpráva o obraně
-                if (b2.Nazivu())
+                VypisZpravu(hrac.VratPosledniZpravu()); // zpráva o útoku
+                VypisZpravu(npc.VratPosledniZpravu()); // zpráva o obraně
+                if (npc.Nazivu())
                 {
-                    b2.Utoc(b1);
+                    npc.Utoc(hrac);
                     Vykresli();
-                    VypisZpravu(b2.VratPosledniZpravu()); // zpráva o útoku
-                    VypisZpravu(b1.VratPosledniZpravu()); // zpráva o obraně
+                    VypisZpravu(npc.VratPosledniZpravu()); // zpráva o útoku
+                    VypisZpravu(hrac.VratPosledniZpravu()); // zpráva o obraně
                 }
                 Console.WriteLine();
             }
 
-            if (b1.Nazivu())
-            {
-                Console.WriteLine("vyhral {0}", b1);
+            if (hrac.Nazivu())
+            { 
+                hrac.VylecitBojovnika();
+                hrac.PocetKol += 1;
+                npc.PridatStatyNPC();
+                npc.VylecitBojovnika();
+                Console.WriteLine("vyhral {0} a ma {1} vyhranych zapasu", hrac, hrac.PocetKol);
+
             }
             else
             {
-                Console.WriteLine("vyhral {0}", b2);
+                Console.WriteLine("vyhral {0} a {1} zemrel a hra konci po {2} vyhranych zapasech", npc, hrac, hrac.PocetKol);
+                Console.ReadKey();
+                System.Environment.Exit(1);
             }
         }
 
