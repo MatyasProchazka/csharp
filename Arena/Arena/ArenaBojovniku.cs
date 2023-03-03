@@ -22,6 +22,8 @@ namespace Arena
         /// </summary>
         private Kostka kostka;
 
+        private int pridanePenize;
+
         /// <summary>
         /// konstruktor tridy arena
         /// </summary>
@@ -104,7 +106,9 @@ namespace Arena
                 hrac.PocetKol += 1;
                 npc.PridatStatyNPC();
                 npc.VylecitBojovnika();
-                Console.WriteLine("vyhral {0} a ma {1} vyhranych zapasu", hrac, hrac.PocetKol);
+                pridanePenize = 5 + kostka.Hod() + hrac.PocetKol * 2;
+                hrac.PridatPenize(pridanePenize);
+                Console.WriteLine("vyhral {0}, získal {1} zlaťáků a ma {2} vyhranych zapasu", hrac, pridanePenize, hrac.PocetKol);
                 Console.ReadKey();
 
             }

@@ -51,13 +51,18 @@ while (zapasit)
         case "3":
             string[] moznosti = { "1", "2", "3", "4" };
             Console.Clear();
-            Console.WriteLine("ZLEPSENI STATU ZA PENIZE! (zatim bez penez)\n1) pridat body do utoku\n2) pridat body do obrany\n3) pridat body do maximalniho zdravi\n4) zpatky do menu");
+            Console.WriteLine("ZLEPSENI STATU ZA PENIZE!\nAktuální zůstatek: {0}\n1) pridat body do utoku ({1} zlataky/bod)\n2) pridat body do obrany ({2} zlataky/bod)\n3) pridat body do maximalniho zdravi({3} zlataky/bod)\n4) zpatky do menu", bojovnik.Penize, bojovnik.ZjistitCenuZaStat("1"), bojovnik.ZjistitCenuZaStat("2"), bojovnik.ZjistitCenuZaStat("3"));
             string volbaMenuStaty = Console.ReadLine();
             while (!moznosti.Contains(volbaMenuStaty))
             {
                 Console.WriteLine("toto neni v menu, zadej prosim tvoji volbu znovu:");
                 volbaMenuStaty = Console.ReadLine();
             }
+            if (volbaMenuStaty == "4")
+            {
+                break;
+            }
+            Console.WriteLine(bojovnik.ZjistitCenuZaStat(volbaMenuStaty));
             Console.WriteLine("Zadej pozadovany pocet bodu, ktere chces pridat");
             //zde se musi pridat exception handling kdyz se vlozi neco jineho nez cislo!!!
             int pocetBoduZvolenehoStatu = Convert.ToInt32(Console.ReadLine());

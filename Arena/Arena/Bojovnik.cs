@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,6 +38,10 @@ namespace Arena
 
         public int PocetKol { get; set; }
 
+        public int Penize { get; private set; }
+
+        protected double cena;
+
         /// <summary>
         /// konstruktor pro atributy
         /// </summary>
@@ -53,6 +58,7 @@ namespace Arena
             this.utok = utok;
             this.obrana = obrana;
             this.kostka = kostka;
+            Penize = 10;
         }
         /// <summary>
         /// vypsani jmena bojovnika
@@ -156,7 +162,7 @@ namespace Arena
         public void VypisStaty()
         {
             Console.Clear();
-            Console.WriteLine("JMENO: {0}\nUtok: {1}\nObrana: {2}\nMaximální zdraví: {3}\n", jmeno, utok, obrana, maxZivot);
+            Console.WriteLine("JMENO: {0}\nUtok: {1}\nObrana: {2}\nMaximální zdraví: {3}\nPeníze: {4} zlaťáků", jmeno, utok, obrana, maxZivot, Penize);
             Console.ReadKey();
         }
 
@@ -170,8 +176,17 @@ namespace Arena
             switch (typStatu)
             {
                 case "1":
-                    utok += pocetBodu;
-                    Console.WriteLine("Pridano {0} bodu do utoku, celkovy utok: {1}", pocetBodu, utok);
+
+                    if (Penize >= (ZjistitCenuZaStat(typStatu) * pocetBodu))
+                    {
+                        utok += pocetBodu;
+                        Penize -= (int)(ZjistitCenuZaStat(typStatu) * pocetBodu);
+                        Console.WriteLine("Pridano {0} bodu do utoku, celkovy utok: {1}", pocetBodu, utok);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Nedostatek prostředků");
+                    }
                     Console.ReadKey();
                     break;
                 case "2":
@@ -206,6 +221,38 @@ namespace Arena
             utok += kostkaNPC.Hod();
             obrana += kostkaNPC.Hod();
             maxZivot += kostkaNPC.Hod() + 4;
+        }
+
+        /// <summary>
+        /// pripocita zadany pocet penez k penezum hrdiny
+        /// </summary>
+        /// <param name="pocetPenez"></param>
+        public void PridatPenize(int pocetPenez)
+        {
+            Penize += pocetPenez;
+        }
+
+        public void UbratPenize(int pocetPenez)
+        {
+            Penize -= pocetPenez;
+        }
+
+        public double ZjistitCenuZaStat(string typStatu)
+        {
+            switch (typStatu)
+            {
+                case "1":
+                    cena = Math.Round((Math.Round(Math.Sqrt(utok), 0) / 2), 0);
+                    return cena;
+                case "2":
+                    cena = Math.Round((Math.Round(Math.Sqrt(obrana), 0) / 2), 0);
+                    return cena;
+                case "3":
+                    cena = Math.Round((Math.Round(Math.Sqrt(utok), 0) / 4), 0);
+                    return cena;
+                default:
+                    return 0;
+            }
         }
     }
 }
