@@ -15,8 +15,8 @@ Console.ReadKey();
 Kostka kostka = new Kostka(10);
 
 //tvorba instance hrace a pocitacoveho protivnika, oba maji dane staty ze zacatku (v budoucnu lehce nahodne)
-Bojovnik bojovnik = new Bojovnik(jmenoZapasnika, 100, 20, 20, kostka);
-Bojovnik souper = new Bojovnik("Golem", 60, 18, 15, kostka);
+Bojovnik bojovnik = new Bojovnik(jmenoZapasnika, 85, 20, 20, kostka);
+Bojovnik souper = new Bojovnik("Golem", 60, 15, 13, kostka);
 ArenaBojovniku arena = new ArenaBojovniku(bojovnik, souper, kostka);
 
 //podminka pro beh hlavniho menu

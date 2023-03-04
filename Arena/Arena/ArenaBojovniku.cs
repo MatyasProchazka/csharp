@@ -71,7 +71,7 @@ namespace Arena
         private void VypisZpravu(string zprava)
         {
             Console.WriteLine(zprava);
-            Thread.Sleep(500);
+            Thread.Sleep(1000);
         }
 
         public void Zapas()
@@ -106,7 +106,7 @@ namespace Arena
                 hrac.PocetKol += 1;
                 npc.PridatStatyNPC();
                 npc.VylecitBojovnika();
-                pridanePenize = 5 + kostka.Hod() + hrac.PocetKol * 2;
+                pridanePenize = 3 + kostka.Hod() + hrac.PocetKol * 2;
                 hrac.PridatPenize(pridanePenize);
                 Console.WriteLine("vyhral {0}, získal {1} zlaťáků a ma {2} vyhranych zapasu", hrac, pridanePenize, hrac.PocetKol);
                 Console.ReadKey();

@@ -94,7 +94,7 @@ namespace Arena
                 s += "█";
             }
             s = s.PadRight(celkem + 1);
-            s += "]";
+            s += string.Format("]     UTOK: {0}   OBRANA: {1}   ZDRAVI: {2}/{3}", utok, obrana, zivot, maxZivot);
             return s;
         }
         /// <summary>
@@ -176,11 +176,11 @@ namespace Arena
             switch (typStatu)
             {
                 case "1":
-
-                    if (Penize >= (ZjistitCenuZaStat(typStatu) * pocetBodu))
+                    cena = (ZjistitCenuZaStat(typStatu) * pocetBodu);
+                    if (Penize >= cena)
                     {
                         utok += pocetBodu;
-                        Penize -= (int)(ZjistitCenuZaStat(typStatu) * pocetBodu);
+                        Penize -= (int)cena;
                         Console.WriteLine("Pridano {0} bodu do utoku, celkovy utok: {1}", pocetBodu, utok);
                     }
                     else
@@ -190,13 +190,31 @@ namespace Arena
                     Console.ReadKey();
                     break;
                 case "2":
-                    obrana += pocetBodu;
-                    Console.WriteLine("Pridano {0} bodu do obrany, celkova obrana: {1}", pocetBodu, obrana);
+                    cena = (ZjistitCenuZaStat(typStatu) * pocetBodu);
+                    if (Penize >= cena)
+                    {
+                        obrana += pocetBodu;
+                        Penize -= (int)cena;
+                        Console.WriteLine("Pridano {0} bodu do obrany, celkova obrana: {1}", pocetBodu, obrana);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Nedostatek prostředků");
+                    }
                     Console.ReadKey();
                     break;
                 case "3":
-                    maxZivot += pocetBodu;
-                    Console.WriteLine("Pridano {0} bodu do maximalniho zdravi, celkove zdravi: {1}", pocetBodu, maxZivot);
+                    cena = (ZjistitCenuZaStat(typStatu) * pocetBodu);
+                    if (Penize >= cena)
+                    {
+                        maxZivot += pocetBodu;
+                        Penize -= (int)cena;
+                        Console.WriteLine("Pridano {0} bodu do maximalniho zdravi, celkove zdravi: {1}", pocetBodu, maxZivot);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Nedostatek prostředků");
+                    }
                     Console.ReadKey();
                     break;
                 default:
@@ -217,10 +235,10 @@ namespace Arena
         /// </summary>
         public void PridatStatyNPC()
         {
-            Kostka kostkaNPC = new Kostka(5);
-            utok += kostkaNPC.Hod();
-            obrana += kostkaNPC.Hod();
-            maxZivot += kostkaNPC.Hod() + 4;
+            Kostka kostkaNPC = new Kostka(4);
+            utok += (kostkaNPC.Hod() + 1);
+            obrana += (kostkaNPC.Hod() + 1);
+            maxZivot += (kostkaNPC.Hod() + 3);
         }
 
         /// <summary>
@@ -245,10 +263,10 @@ namespace Arena
                     cena = Math.Round((Math.Round(Math.Sqrt(utok), 0) / 2), 0);
                     return cena;
                 case "2":
-                    cena = Math.Round((Math.Round(Math.Sqrt(obrana), 0) / 2), 0);
+                    cena = Math.Round((Math.Round(Math.Sqrt(obrana), 0) / 1), 0);
                     return cena;
                 case "3":
-                    cena = Math.Round((Math.Round(Math.Sqrt(utok), 0) / 4), 0);
+                    cena = Math.Round((Math.Round(Math.Sqrt(maxZivot), 0) / 8), 0);
                     return cena;
                 default:
                     return 0;
