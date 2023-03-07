@@ -34,6 +34,8 @@ namespace Arena
         /// </summary>
         protected Kostka kostka;
 
+        public Zbran Zbran { get; set; }
+
         private string zprava;
 
         public int PocetKol { get; set; }
@@ -50,7 +52,7 @@ namespace Arena
         /// <param name="utok"></param>
         /// <param name="obrana"></param>
         /// <param name="kostka"></param>
-        public Bojovnik(string jmeno, int zivot, int utok, int obrana, Kostka kostka)
+        public Bojovnik(string jmeno, int zivot, int utok, int obrana, Kostka kostka, Zbran zbran)
         {
             this.jmeno = jmeno;
             this.zivot = zivot;
@@ -59,6 +61,8 @@ namespace Arena
             this.obrana = obrana;
             this.kostka = kostka;
             Penize = 10;
+            PocetKol = 0;
+            Zbran = zbran;
         }
         /// <summary>
         /// vypsani jmena bojovnika
@@ -134,7 +138,7 @@ namespace Arena
         /// <param name="souper"></param>
         public virtual void Utoc(Bojovnik souper)
         {
-            int uder = utok + kostka.Hod();
+            int uder = utok + kostka.Hod() + Zbran.Utoc();
             NastavZpravu(String.Format("{0} utoci s uderem za {1} hp", jmeno, uder));
             souper.BranSe(uder);
 
@@ -162,7 +166,7 @@ namespace Arena
         public void VypisStaty()
         {
             Console.Clear();
-            Console.WriteLine("JMENO: {0}\nUtok: {1}\nObrana: {2}\nMaximální zdraví: {3}\nPeníze: {4} zlaťáků", jmeno, utok, obrana, maxZivot, Penize);
+            Console.WriteLine("JMENO: {0}\nUtok: {1}\nObrana: {2}\nMaximální zdraví: {3}\nPeníze: {4} zlaťáků\nAktuální zbraň: {5}", jmeno, utok, obrana, maxZivot, Penize, Zbran);
             Console.ReadKey();
         }
 
@@ -271,6 +275,11 @@ namespace Arena
                 default:
                     return 0;
             }
+        }
+
+        public void ZmenitZbran(Zbran novaZbran)
+        {
+            Zbran = novaZbran;
         }
     }
 }

@@ -71,7 +71,8 @@ namespace Arena
         private void VypisZpravu(string zprava)
         {
             Console.WriteLine(zprava);
-            Thread.Sleep(1000);
+            //pauza pri boji, vetsi cislo == delsi pausa a pomalejsi souboj
+            Thread.Sleep(650);
         }
 
         public void Zapas()
