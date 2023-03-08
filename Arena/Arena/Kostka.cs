@@ -42,5 +42,10 @@ namespace Arena
         {
             return String.Format("kostka s {0} stranami", pocetStran);
         }
+
+        public int VygenerovatCislo(int minPocet, int maxPocet)
+        {
+            return random.Next(minPocet, maxPocet);
+        }
     }
 }

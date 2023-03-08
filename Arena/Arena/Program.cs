@@ -1,8 +1,5 @@
 ﻿using Arena;
 
-
-
-
 Console.WriteLine("Vítej v aréně! Nejprve si musiš vytvořit zápasníka, jak si přeješ se jmenovat?");
 string jmenoZapasnika = Console.ReadLine();
 // checkuje jestli je zadany vstup platny
@@ -23,7 +20,8 @@ Zbran zbranNPC = new Zbran("Nic", 0, 0, 0);
 Bojovnik bojovnik = new Bojovnik(jmenoZapasnika, 85, 20, 20, kostka, zbran);
 Bojovnik souper = new Bojovnik("Golem", 60, 15, 13, kostka, zbranNPC);
 ArenaBojovniku arena = new ArenaBojovniku(bojovnik, souper, kostka);
-Obchod obchod = new Obchod(bojovnik, 6);
+Obchod obchod = new Obchod(bojovnik, 4);
+
 //podminka pro beh hlavniho menu
 bool zapasit = true;
 
@@ -82,8 +80,24 @@ while (zapasit)
             Console.Clear();
             obchod.VypsatNabidku();
             Console.WriteLine("Napiš číslo předmětu, který chceš koupit. Jestli chceš zpátky do menu, zmáčkni 0");
-            int indexPredmetu = Convert.ToInt32(Console.ReadLine());
-            obchod.KoupitZbran(indexPredmetu);
+            // EXCEPTION HANDELING PRIDAT!!!
+            string vstupMenuObchod = Console.ReadLine();
+            while (string.IsNullOrEmpty(vstupMenuObchod))
+            {
+                Console.WriteLine("neplatne zadani");
+                vstupMenuObchod = Console.ReadLine();
+            }
+            try
+            {
+                int indexPredmetu = Convert.ToInt32(vstupMenuObchod);
+                obchod.KoupitZbran(indexPredmetu);
+            }
+            catch(FormatException e1)
+            {
+                Console.WriteLine("Neplatny vstup, kliknutim se vratis zpatky do menu");
+            } 
+            
+            
             Console.ReadKey();
             break;
         //opusteni hry
