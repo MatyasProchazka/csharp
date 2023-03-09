@@ -33,16 +33,22 @@ namespace Arena
         /// instance hraci kostky
         /// </summary>
         protected Kostka kostka;
-
+        /// <summary>
+        /// vytovreni atributu zbrane bojovnika
+        /// </summary>
         public Zbran Zbran { get; set; }
-
-        private string zprava;
-
+        /// <summary>
+        /// zprava ktera se vypise 
+        /// </summary>
+        private string? zprava;
+        /// <summary>
+        /// pocet kol, ktera bojovnik vyhral
+        /// </summary>
         public int PocetKol { get; set; }
-
+        /// <summary>
+        /// penize, ktere bojovnik a muze je pouziva ke koupi
+        /// </summary>
         public int Penize { get; private set; }
-
-        protected double cena;
 
         /// <summary>
         /// konstruktor pro atributy
@@ -177,6 +183,7 @@ namespace Arena
         /// <param name="pocetBodu"></param>
         public void PridatStat(string typStatu, int pocetBodu)
         {
+            double cena;
             switch (typStatu)
             {
                 case "1":
@@ -261,6 +268,7 @@ namespace Arena
 
         public double ZjistitCenuZaStat(string typStatu)
         {
+            double cena;
             switch (typStatu)
             {
                 case "1":

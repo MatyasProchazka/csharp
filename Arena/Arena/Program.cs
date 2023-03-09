@@ -68,7 +68,6 @@ while (zapasit)
             {
                 break;
             }
-            Console.WriteLine(bojovnik.ZjistitCenuZaStat(volbaMenuStaty));
             Console.WriteLine("Zadej pozadovany pocet bodu, ktere chces pridat");
             //zde se musi pridat exception handling kdyz se vlozi neco jineho nez cislo!!!
             int pocetBoduZvolenehoStatu = Convert.ToInt32(Console.ReadLine());
