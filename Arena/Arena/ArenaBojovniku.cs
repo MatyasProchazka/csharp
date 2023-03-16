@@ -22,8 +22,6 @@ namespace Arena
         /// </summary>
         private Kostka kostka;
 
-        private int pridanePenize;
-
         /// <summary>
         /// konstruktor tridy arena
         /// </summary>
@@ -50,6 +48,10 @@ namespace Arena
             Console.WriteLine();    
         }
 
+        /// <summary>
+        /// vypise jmeno, zivoty a popr. manu bojovnika
+        /// </summary>
+        /// <param name="b"></param>
         private void VypisBojovnika(Bojovnik b)
         {
             Console.WriteLine(b);
@@ -72,9 +74,12 @@ namespace Arena
         {
             Console.WriteLine(zprava);
             //pauza pri boji, vetsi cislo == delsi pausa a pomalejsi souboj
-            Thread.Sleep(650);
+            Thread.Sleep(550);
         }
 
+        /// <summary>
+        /// simulace zapasu, stridani utoku hrace a npc
+        /// </summary>
         public void Zapas()
         {
             Console.Clear();
@@ -86,12 +91,14 @@ namespace Arena
             // cyklus s bojem
             while (hrac.Nazivu() && npc.Nazivu())
             {
+                //utoceni hrace
                 hrac.Utoc(npc);
                 Vykresli();
                 VypisZpravu(hrac.VratPosledniZpravu()); // zpráva o útoku
                 VypisZpravu(npc.VratPosledniZpravu()); // zpráva o obraně
                 if (npc.Nazivu())
                 {
+                    //utoceni NPC
                     npc.Utoc(hrac);
                     Vykresli();
                     VypisZpravu(npc.VratPosledniZpravu()); // zpráva o útoku
@@ -102,12 +109,12 @@ namespace Arena
 
             if (hrac.Nazivu())
             { 
-                //nastavi hraci a npc zdravi na max a zesili npc
+                //nastavi hraci a npc zdravi na max a zesili npc, prida penize hraci
                 hrac.VylecitBojovnika();
                 hrac.PocetKol += 1;
                 npc.PridatStatyNPC();
                 npc.VylecitBojovnika();
-                pridanePenize = 3 + kostka.Hod() + hrac.PocetKol * 2;
+                int pridanePenize = 3 + kostka.Hod() + hrac.PocetKol * 2;
                 hrac.PridatPenize(pridanePenize);
                 Console.WriteLine("vyhral {0}, získal {1} zlaťáků a ma {2} vyhranych zapasu", hrac, pridanePenize, hrac.PocetKol);
                 Console.ReadKey();
@@ -115,6 +122,7 @@ namespace Arena
             }
             else
             {
+                //hrac umrel a hra se vypina (bude predelano)
                 Console.WriteLine("vyhral {0} a {1} zemrel a hra konci po {2} vyhranych zapasech", npc, hrac, hrac.PocetKol);
                 Console.ReadKey();
                 System.Environment.Exit(1);

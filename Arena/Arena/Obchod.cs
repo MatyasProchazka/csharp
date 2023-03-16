@@ -78,13 +78,23 @@ namespace Arena
                 int index = moznost - 1;
                 if (bojovnik.Penize >= ZbraneList[index].Cena)
                 {
-                    Console.WriteLine("koupena zbran: {0}!", ZbraneList[index].Jmeno);
+                    
                     //ubere hraci penize a nasadi mu jeho zbran
-                    bojovnik.UbratPenize(ZbraneList[index].Cena);
-                    bojovnik.ZmenitZbran(ZbraneList[index]);
-                    //vymeni zbran v obchode za novou
-                    ZbraneList.RemoveAt(index);
-                    PridatZbran(index);
+                    
+
+                    if (bojovnik.DatZbranDoInventare(ZbraneList[index])) 
+                    {
+                        bojovnik.UbratPenize(ZbraneList[index].Cena);
+                        Console.WriteLine("koupena zbran: {0}!", ZbraneList[index].Jmeno);
+                        //vymeni zbran v obchode za novou
+                        ZbraneList.RemoveAt(index);
+                        PridatZbran(index);
+                    }
+                    else
+                    {
+                        Console.WriteLine("plny inventar");
+                    }
+                    
                 }
                 else
                 {

@@ -31,7 +31,7 @@ namespace Arena
         /// <param name="kostka"></param>
         /// <param name="mana"></param>
         /// <param name="magickyUtok"></param>
-        public Mag(string jmeno, int zivot, int utok, int obrana, Kostka kostka, Zbran zbran, int mana, int magickyUtok): base(jmeno, zivot, utok, obrana, kostka, zbran) 
+        public Mag(string jmeno, int zivot, int utok, int obrana, int velikostInventare, Kostka kostka, Zbran zbran, int mana, int magickyUtok): base(jmeno, zivot, utok, obrana, velikostInventare, kostka, zbran) 
         {
             this.mana = mana;
             this.maxMana = mana;

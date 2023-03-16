@@ -50,6 +50,10 @@ namespace Arena
         /// </summary>
         public int Penize { get; private set; }
 
+        public int VelikostInventare { get; private set; }
+        
+        private List<Zbran> inventar = new List<Zbran>();
+
         /// <summary>
         /// konstruktor pro atributy
         /// </summary>
@@ -58,7 +62,7 @@ namespace Arena
         /// <param name="utok"></param>
         /// <param name="obrana"></param>
         /// <param name="kostka"></param>
-        public Bojovnik(string jmeno, int zivot, int utok, int obrana, Kostka kostka, Zbran zbran)
+        public Bojovnik(string jmeno, int zivot, int utok, int obrana, int velikostInventare, Kostka kostka, Zbran zbran)
         {
             this.jmeno = jmeno;
             this.zivot = zivot;
@@ -69,6 +73,12 @@ namespace Arena
             Penize = 10;
             PocetKol = 0;
             Zbran = zbran;
+            VelikostInventare = velikostInventare;
+
+            for (int i = 0; i<VelikostInventare; i++)
+            {
+                inventar.Add(new Zbran("Prazdne", 0, 0, 0));
+            }
         }
         /// <summary>
         /// vypsani jmena bojovnika
@@ -261,11 +271,20 @@ namespace Arena
             Penize += pocetPenez;
         }
 
+        /// <summary>
+        /// odecte penize od poctu penez hrdiny
+        /// </summary>
+        /// <param name="pocetPenez"></param>
         public void UbratPenize(int pocetPenez)
         {
             Penize -= pocetPenez;
         }
 
+        /// <summary>
+        /// vrati pozadovanou cenu za 1 bod zvyseni statu na zaklade aktualnich statu (1 = utok, 2 = obrana, 3 = zivot)
+        /// </summary>
+        /// <param name="typStatu"></param>
+        /// <returns>cena za 1 bod zadaneho statu</returns>
         public double ZjistitCenuZaStat(string typStatu)
         {
             double cena;
@@ -285,9 +304,64 @@ namespace Arena
             }
         }
 
+        /// <summary>
+        /// vymeni aktualne drzenou zbran za zadanou zbran
+        /// </summary>
+        /// <param name="novaZbran"></param>
         public void ZmenitZbran(Zbran novaZbran)
         {
+            Zbran docasnaZbran = Zbran;
+            int index = inventar.IndexOf(novaZbran);
+
             Zbran = novaZbran;
         }
+
+        public bool DatZbranDoInventare(Zbran novaZbran)
+        {
+            int index = 0;
+            bool udelano = false;
+            foreach (Zbran zbran in inventar)
+            {
+                if (zbran.Jmeno == "Prazdne")
+                {
+                    inventar.RemoveAt(index);
+                    inventar.Insert(index, novaZbran);
+                    udelano = true;
+                    break;
+                }
+                
+
+                index++;
+            }
+            if (udelano)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public void VypsatInventar()
+        {
+            Console.Clear();
+            int index = 1;
+            Console.WriteLine("INVENTAR\n");
+            foreach(Zbran zbran in inventar)
+            {
+                if (zbran.Jmeno != "Prazdne")
+                {
+                    Console.WriteLine("{0}) jmeno: {1}  utok: {2}   kriticka sance: {3}   cena: {4}", index, zbran.Jmeno, zbran.Utok, zbran.KrtitickaSance, zbran.Cena);
+                }
+                else
+                {
+                    Console.WriteLine("{0}) {1}", index, zbran.Jmeno);
+                }
+                index++;
+            }
+        }
+
     }
 }
