@@ -333,14 +333,7 @@ namespace Arena
 
                 index++;
             }
-            if (udelano)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return udelano;
 
         }
 
@@ -351,17 +344,78 @@ namespace Arena
             Console.WriteLine("INVENTAR\n");
             foreach(Zbran zbran in inventar)
             {
-                if (zbran.Jmeno != "Prazdne")
-                {
-                    Console.WriteLine("{0}) jmeno: {1}  utok: {2}   kriticka sance: {3}   cena: {4}", index, zbran.Jmeno, zbran.Utok, zbran.KrtitickaSance, zbran.Cena);
-                }
-                else
-                {
-                    Console.WriteLine("{0}) {1}", index, zbran.Jmeno);
-                }
+                Console.WriteLine("{0}) {1}", index, zbran.Jmeno);
                 index++;
             }
         }
 
+        public void NasaditZbran(int indexZbrane)
+        {
+            Zbran docasnaZbran = Zbran;
+            Zbran = inventar[indexZbrane];
+            inventar.RemoveAt(indexZbrane);
+            inventar.Insert(indexZbrane, docasnaZbran);
+        }
+
+        public void ZobrazeniZbrane(int index)
+        {
+            Console.Clear();
+            Zbran zbran = inventar[index];
+            if (zbran.Jmeno != "Prazdne") 
+            {
+                Console.WriteLine("ZBRAN: {0}\nUtok: {1}\nKriticka sance: {2}\nCena: {3}", zbran.Jmeno, zbran.Utok, zbran.KrtitickaSance, zbran.Cena);
+                Console.WriteLine("\nMOZNOSTI:\n1) Nasadit\n2) Prodat");
+                int volba = int.Parse(Console.ReadLine());
+                switch (volba)
+                {
+                    case 1:
+                        NasaditZbran(index);
+                        break;
+                    case 2:
+                        ProdatZbran(inventar[index]);
+                        break;
+                    default:
+                        Console.WriteLine("chybne zadani");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nic tu neni");
+                Console.ReadKey();
+            }
+        }
+
+        public void ProdatZbran(Zbran zbran)
+        {
+            Console.Clear();
+            int prodejniCena = Convert.ToInt32(Math.Round(zbran.Cena * 0.4));
+            int index = inventar.IndexOf(zbran);
+
+            Console.WriteLine("chces prodat zbran za {0} zlataku?\n1) ANO\n2) NE", prodejniCena);
+            try
+            {
+                int volba = int.Parse(Console.ReadLine());
+                switch (volba)
+                {
+                    case 1:
+                        inventar.RemoveAt(index);
+                        inventar.Insert(index, new Zbran("Prazdne", 0, 0, 0));
+                        Penize += prodejniCena;
+
+                        Console.WriteLine("prodano za {0} zlataku", prodejniCena);
+                        Console.ReadKey();
+                        break;
+                    case 2:
+                        Console.WriteLine("vracis se zpatky do menu");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("spatne, jdes zpatky do menu");
+            }
+        }
     }
 }

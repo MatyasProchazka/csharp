@@ -61,7 +61,16 @@ while (zapasit)
 
         case "3":
             bojovnik.VypsatInventar();
-            Console.ReadKey();
+            Console.WriteLine("\nZvol zbran: (0 na odejiti)");
+            try
+            {
+                int volba = int.Parse(Console.ReadLine());
+                bojovnik.ZobrazeniZbrane(volba - 1);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("neplatne, zpatky do menu");
+            }
             break;
 
         //menu na zvyseni statu o zvolenou hodnotu (do budoucna za herni menu)
