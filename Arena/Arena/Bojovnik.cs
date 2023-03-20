@@ -54,6 +54,8 @@ namespace Arena
         
         private List<Zbran> inventar = new List<Zbran>();
 
+        string[] jmenaProtivniku = { "Barnabas", "Josef", "Michael", "Joe", "Kostlivec z hlubin", "Tvoje mama", "Otec", "Srdce" };
+
         /// <summary>
         /// konstruktor pro atributy
         /// </summary>
@@ -416,6 +418,36 @@ namespace Arena
             {
                 Console.WriteLine("spatne, jdes zpatky do menu");
             }
+        }
+
+        public Bojovnik VygenerovatProtivnika()
+        {
+            Obchod obchod = new Obchod(this, 0);
+            string jmeno = jmenaProtivniku[kostka.VygenerovatCislo(0, jmenaProtivniku.Length)];
+            int utok = 15 + PocetKol + 2;
+            int zivot = 60 + PocetKol * 1;
+            int obrana = 18 + PocetKol + 2;
+            int velikostInventare = 0;
+            Zbran zbran = obchod.NovaZbran();
+
+            return new Bojovnik(jmeno, zivot, utok, obrana, velikostInventare, this.kostka, zbran);
+        }
+
+        public Bojovnik VygenerovatProtivnikaDuengoen(int poschodi)
+        {
+            string jmeno = jmenaProtivniku[kostka.VygenerovatCislo(0, jmenaProtivniku.Length)];
+            int utok = 5 + poschodi * 3;
+            int zivot = 40 + poschodi * 3;
+            int obrana = 7 + poschodi * 2;
+            int velikostInventare = 0;
+            Zbran zbran = new Zbran("nic", 0, 0, 0);
+
+            return new Bojovnik(jmeno, zivot, utok, obrana, velikostInventare, this.kostka, zbran);
+        }
+
+        public double PodilZivotu()
+        {
+            return zivot / maxZivot;
         }
     }
 }

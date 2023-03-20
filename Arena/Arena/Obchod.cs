@@ -45,10 +45,18 @@ namespace Arena
         /// vytvori a prida do listu zbrani novou instanci zbrane se staty vygenerovanymi na zaklade momentalniho kola a nahodneho faktoru
         /// </summary>
         /// <param name="index"></param>
-        public void PridatZbran(int index)
+        /// 
+
+        public Zbran NovaZbran()
         {
             int utok = NahodnyUtok(bojovnik.PocetKol);
-            ZbraneList.Insert(index, new Zbran(VygenerovatJmeno(), utok, NahodnyKritickaSance(bojovnik.PocetKol), VypocitatCenuZbrane(utok, bojovnik.PocetKol)));
+            return new Zbran(VygenerovatJmeno(), utok, NahodnyKritickaSance(bojovnik.PocetKol), VypocitatCenuZbrane(utok, bojovnik.PocetKol));
+        }
+
+        private void PridatZbran(int index)
+        {
+           
+            ZbraneList.Insert(index, NovaZbran());
         }
 
         /// <summary>

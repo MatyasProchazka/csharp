@@ -1,6 +1,7 @@
 ﻿using Arena;
 
 
+
 Console.WriteLine("Vítej v aréně! Nejprve si musiš vytvořit zápasníka, jak si přeješ se jmenovat?");
 string jmenoZapasnika = Console.ReadLine();
 // checkuje jestli je zadany vstup platny
@@ -17,13 +18,14 @@ Console.ReadKey();
 //tvorba instance kostky a zbrani
 Kostka kostka = new Kostka(10);
 Zbran zbran = new Zbran("Palcat", 5, 10, 5);
-Zbran zbranNPC = new Zbran("Nic", 0, 0, 0);
 
 //tvorba instance hrace a pocitacoveho protivnika, oba maji dane staty ze zacatku (v budoucnu lehce nahodne)
 Bojovnik bojovnik = new Bojovnik(jmenoZapasnika, 85, 20, 20, 4, kostka, zbran);
-Bojovnik souper = new Bojovnik("Golem", 60, 15, 13, 1, kostka, zbranNPC);
-ArenaBojovniku arena = new ArenaBojovniku(bojovnik, souper, kostka);
+ArenaBojovniku arena = new ArenaBojovniku(bojovnik, kostka);
 Obchod obchod = new Obchod(bojovnik, 4);
+Menu menu = new Menu();
+arena.DungeonTimerFinished += menu.OnDungeonTimerFinished;
+arena.DungeonEntered += menu.OnDungeonEntered;
 
 //podminka pro beh hlavniho menu
 bool zapasit = true;
@@ -34,9 +36,8 @@ while (zapasit)
 {
     Console.Clear();
     //hlavni menu
-    Console.WriteLine("Arena");
-    Console.WriteLine("Menu:");
-    Console.WriteLine("1) Zapasit \n2) Muj bojovnik \n3) Inventar \n4) Vylepsit moje staty \n5) Obchod\n6) Odejit (ztrati se vsechen postup)");
+    menu.InMenu = true;
+    menu.VypsatMenu();
     string volbaMenu = Console.ReadLine();
 
     //volba v menu
@@ -51,15 +52,23 @@ while (zapasit)
     {
         //zacne zapas
         case "1":
+            menu.InMenu = false;
             arena.Zapas();
             break;
 
-        //vypise aktualni staty hrace
         case "2":
+            menu.InMenu = false;
+            arena.Dungeon();
+            break;
+
+        //vypise aktualni staty hrace
+        case "3":
+            menu.InMenu = false;
             bojovnik.VypisStaty();
             break;
 
-        case "3":
+        case "4":
+            menu.InMenu = false;
             bojovnik.VypsatInventar();
             Console.WriteLine("\nZvol zbran: (0 na odejiti)");
             try
@@ -74,7 +83,8 @@ while (zapasit)
             break;
 
         //menu na zvyseni statu o zvolenou hodnotu (do budoucna za herni menu)
-        case "4":
+        case "5":
+            menu.InMenu = false;
             string[] moznosti = { "1", "2", "3", "4" };
             Console.Clear();
             Console.WriteLine("ZLEPSENI STATU ZA PENIZE!\nAktuální zůstatek: {0}\n1) pridat body do utoku ({1} zlataky/bod)\n2) pridat body do obrany ({2} zlataky/bod)\n3) pridat body do maximalniho zdravi({3} zlataky/bod)\n4) zpatky do menu", bojovnik.Penize, bojovnik.ZjistitCenuZaStat("1"), bojovnik.ZjistitCenuZaStat("2"), bojovnik.ZjistitCenuZaStat("3"));
@@ -97,7 +107,8 @@ while (zapasit)
             break;
 
         // obchod se zbranemi
-        case "5":
+        case "6":
+            menu.InMenu = false;
             Console.Clear();
             obchod.VypsatNabidku();
             Console.WriteLine("Napiš číslo předmětu, který chceš koupit. Jestli chceš zpátky do menu, zmáčkni 0");
@@ -123,7 +134,7 @@ while (zapasit)
             break;
 
         //opusteni hry
-        case "6":
+        case "7":
             Console.WriteLine("Zvládl jsi zdolat {0} protivníků! Klikni pro ukončení", bojovnik.PocetKol);
             Console.ReadKey();
             zapasit = false;

@@ -14,13 +14,14 @@ namespace Arena
         /// </summary>
         private Bojovnik hrac;
         /// <summary>
-        /// instance druheho bojovnika
-        /// </summary>
-        private Bojovnik npc;
-        /// <summary>
         /// instance hraci kostky
         /// </summary>
         private Kostka kostka;
+
+        private bool dungeonReady = true;
+
+        public event EventHandler DungeonTimerFinished;
+        public event EventHandler DungeonEntered;
 
         /// <summary>
         /// konstruktor tridy arena
@@ -28,24 +29,23 @@ namespace Arena
         /// <param name="bojovnik1"></param>
         /// <param name="bojovnik2"></param>
         /// <param name="kostka"></param>
-        public ArenaBojovniku(Bojovnik hrac, Bojovnik npc, Kostka kostka)
+        public ArenaBojovniku(Bojovnik hrac, Kostka kostka)
         {
             this.hrac = hrac;
-            this.npc = npc;
             this.kostka = kostka;
         }
         /// <summary>
         /// vykresleni zakladnich informaci
         /// </summary>
-        private void Vykresli()
+        private void Vykresli(Bojovnik protivnik)
         {
             Console.Clear();
             Console.WriteLine("-------------- Aréna -------------- \n");
             Console.WriteLine("Bojovníci: \n");
             VypisBojovnika(hrac);
             Console.WriteLine();
-            VypisBojovnika(npc);
-            Console.WriteLine();    
+            VypisBojovnika(protivnik);
+            Console.WriteLine();
         }
 
         /// <summary>
@@ -70,11 +70,11 @@ namespace Arena
         /// vypsani zpravy s dramatickou pauzou
         /// </summary>
         /// <param name="zprava"></param>
-        private void VypisZpravu(string zprava)
+        private void VypisZpravu(string zprava, int uspani = 500)
         {
             Console.WriteLine(zprava);
             //pauza pri boji, vetsi cislo == delsi pausa a pomalejsi souboj
-            Thread.Sleep(550);
+            Thread.Sleep(uspani);
         }
 
         /// <summary>
@@ -82,38 +82,37 @@ namespace Arena
         /// </summary>
         public void Zapas()
         {
+            Bojovnik protivnik = hrac.VygenerovatProtivnika();
             Console.Clear();
             Console.WriteLine("Vítejte v aréně!");
-            Console.WriteLine("Dnes se utkají {0} s {1}! \n", hrac, npc);
+            Console.WriteLine("Dnes se utkají {0} s {1}! \n", hrac, protivnik);
             // prohození bojovníků
             Console.WriteLine("Zapas muze zacit...");
             Console.ReadKey();
             // cyklus s bojem
-            while (hrac.Nazivu() && npc.Nazivu())
+            while (hrac.Nazivu() && protivnik.Nazivu())
             {
                 //utoceni hrace
-                hrac.Utoc(npc);
-                Vykresli();
+                hrac.Utoc(protivnik);
+                Vykresli(protivnik);
                 VypisZpravu(hrac.VratPosledniZpravu()); // zpráva o útoku
-                VypisZpravu(npc.VratPosledniZpravu()); // zpráva o obraně
-                if (npc.Nazivu())
+                VypisZpravu(protivnik.VratPosledniZpravu()); // zpráva o obraně
+                if (protivnik.Nazivu())
                 {
                     //utoceni NPC
-                    npc.Utoc(hrac);
-                    Vykresli();
-                    VypisZpravu(npc.VratPosledniZpravu()); // zpráva o útoku
+                    protivnik.Utoc(hrac);
+                    Vykresli(protivnik);
+                    VypisZpravu(protivnik.VratPosledniZpravu()); // zpráva o útoku
                     VypisZpravu(hrac.VratPosledniZpravu()); // zpráva o obraně
                 }
                 Console.WriteLine();
             }
 
             if (hrac.Nazivu())
-            { 
+            {
                 //nastavi hraci a npc zdravi na max a zesili npc, prida penize hraci
                 hrac.VylecitBojovnika();
                 hrac.PocetKol += 1;
-                npc.PridatStatyNPC();
-                npc.VylecitBojovnika();
                 int pridanePenize = 3 + kostka.Hod() + hrac.PocetKol * 2;
                 hrac.PridatPenize(pridanePenize);
                 Console.WriteLine("vyhral {0}, získal {1} zlaťáků a ma {2} vyhranych zapasu", hrac, pridanePenize, hrac.PocetKol);
@@ -123,11 +122,100 @@ namespace Arena
             else
             {
                 //hrac umrel a hra se vypina (bude predelano)
-                Console.WriteLine("vyhral {0} a {1} zemrel a hra konci po {2} vyhranych zapasech", npc, hrac, hrac.PocetKol);
+                Console.WriteLine("vyhral {0}, musis se vylepsit a zkusit to znovu", protivnik);
                 Console.ReadKey();
-                System.Environment.Exit(1);
+                hrac.VylecitBojovnika();
             }
         }
 
+        public void Dungeon()
+        {
+            if (dungeonReady)
+            {
+                OnDungeonEntered();
+                Console.WriteLine("vitej v dungeonu, zde se muzes vylepsit prochazenim pater proti cim dal tim tezsim nepritelum");
+                Console.ReadKey();
+
+                int pocetPoschodi = 1;
+                int RychlostZprav = 200;
+                int odmena = 0;
+                while (hrac.Nazivu())
+                {
+                    Bojovnik protivnik = hrac.VygenerovatProtivnikaDuengoen(pocetPoschodi);
+                    while (protivnik.Nazivu())
+                    {
+                        if (hrac.Nazivu())
+                        {
+                            hrac.Utoc(protivnik);
+                            Vykresli(protivnik);
+                            VypisZpravu(hrac.VratPosledniZpravu(), RychlostZprav); // zpráva o útoku
+                            VypisZpravu(protivnik.VratPosledniZpravu(), RychlostZprav); // zpráva o obraně
+                            if (protivnik.Nazivu())
+                            {
+                                //utoceni NPC
+                                protivnik.Utoc(hrac);
+                                Vykresli(protivnik);
+                                VypisZpravu(protivnik.VratPosledniZpravu(), RychlostZprav); // zpráva o útoku
+                                VypisZpravu(hrac.VratPosledniZpravu(), RychlostZprav); // zpráva o obraně
+                            }
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            Console.WriteLine($"hrac {hrac} umrel");
+                            break;
+                        }
+
+                    }
+                    pocetPoschodi += 1;
+                    double pripsanaCastka = pocetPoschodi * (1 + (Math.Ceiling(Convert.ToDouble(hrac.PocetKol) / 10)));
+                    if (pocetPoschodi < 10)
+                    {
+                        pripsanaCastka = pripsanaCastka / 2;
+                        odmena += Convert.ToInt32(Math.Round(pripsanaCastka));
+                    }
+
+                }
+                Console.WriteLine($"hrac {hrac} prekonal {pocetPoschodi} pater dungeonu a ziskal {odmena} zlataku");
+                hrac.VylecitBojovnika();
+                hrac.PridatPenize(odmena);
+
+                dungeonReady = false;
+                new Thread(() => { dungeonReady = CasovacDungeon(); }).Start();
+
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("Ještě neuplynul cooldown na dungeon, prijd za chvili");
+                Console.ReadKey();
+            }
+        }
+
+        private bool CasovacDungeon()
+        {
+            int cooldownDungeon = 30000;
+            Thread.Sleep(cooldownDungeon);
+            Console.WriteLine("");
+            OnDungeonTimerFinished();
+
+            return true;
+        }
+
+        protected virtual void OnDungeonTimerFinished()
+        {
+            if (DungeonTimerFinished != null)
+            {
+                DungeonTimerFinished(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnDungeonEntered()
+        {
+            if (DungeonEntered!= null)
+            {
+                DungeonEntered(this, EventArgs.Empty);
+            }
+        }
     }
 }
